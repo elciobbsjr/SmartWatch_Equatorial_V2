@@ -162,4 +162,4 @@
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/cores/esp32/io_pin_remap.h \
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
  include/task_telemetry.h include/telemetry.h include/app_config.h \
- include/wifi_mgr.h include/mqtt_mgr.h
+ include/wifi_mgr.h include/mqtt_mgr.h include/http_mgr.h

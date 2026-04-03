@@ -10,6 +10,7 @@
             "includePath": [
                 "C:/Users/ResTIC16/Documents/PlatformIO/Projects/SmartWatch_Equatorial_V2/include",
                 "C:/Users/ResTIC16/Documents/PlatformIO/Projects/SmartWatch_Equatorial_V2/src",
+                "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src",
                 "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
                 "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                 "C:/Users/ResTIC16/Documents/PlatformIO/Projects/SmartWatch_Equatorial_V2/.pio/libdeps/lolin_c3_mini/PubSubClient/src",
@@ -219,7 +220,6 @@
                 "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/Ethernet/src",
                 "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/FFat/src",
                 "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/FS/src",
-                "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src",
                 "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdate/src",
                 "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdateServer/src",
                 "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/I2S/src",
@@ -245,6 +245,7 @@
                 "path": [
                     "C:/Users/ResTIC16/Documents/PlatformIO/Projects/SmartWatch_Equatorial_V2/include",
                     "C:/Users/ResTIC16/Documents/PlatformIO/Projects/SmartWatch_Equatorial_V2/src",
+                    "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src",
                     "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
                     "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                     "C:/Users/ResTIC16/Documents/PlatformIO/Projects/SmartWatch_Equatorial_V2/.pio/libdeps/lolin_c3_mini/PubSubClient/src",
@@ -454,7 +455,6 @@
                     "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/Ethernet/src",
                     "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/FFat/src",
                     "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/FS/src",
-                    "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src",
                     "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdate/src",
                     "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdateServer/src",
                     "C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/I2S/src",
