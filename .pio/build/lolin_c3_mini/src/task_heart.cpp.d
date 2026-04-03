@@ -161,4 +161,4 @@
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32c3/include/esp_hw_support/include/soc/esp32/spiram.h \
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/cores/esp32/io_pin_remap.h \
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
- include/task_heart.h include/app_config.h
+ include/task_heart.h include/app_config.h include/telemetry.h
