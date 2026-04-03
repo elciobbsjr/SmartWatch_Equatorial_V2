@@ -14,13 +14,20 @@ void task_telemetry(void *pvParameters) {
     const uint32_t PUBLISH_INTERVAL_MS = 2000; // Envia pro MQTT a cada 2 segundos
 
     while (true) {
-        // 1. GARANTE A CONEXÃO WI-FI (Sem travar o resto do sistema!)
+        // 1. GARANTE A CONEXÃO WI-FI
         if (!wifi_is_connected()) {
-            Serial.println("[CLOUD] Wi-Fi desconectado. Tentando reconectar...");
-            wifi_connect();
-            vTaskDelay(pdMS_TO_TICKS(1000));
-            continue; // Volta pro início do loop
-        }
+
+    Serial.println("[CLOUD] Conectando WiFi...");
+
+    if (!wifi_connect())
+    {
+        Serial.println("[CLOUD] Falha WiFi");
+        vTaskDelay(pdMS_TO_TICKS(2000));
+        continue;
+    }
+
+    Serial.println("[CLOUD] WiFi OK");
+}
 
         // 2. GARANTE A CONEXÃO MQTT
         if (!mqtt_is_connected()) {
@@ -29,7 +36,7 @@ void task_telemetry(void *pvParameters) {
                  Serial.println("[CLOUD] MQTT Conectado com Sucesso!");
             }
             vTaskDelay(pdMS_TO_TICKS(1000));
-            continue; // Volta pro início
+            continue; 
         }
 
         // 3. MANTÉM A COMUNICAÇÃO VIVA
@@ -46,21 +53,20 @@ void task_telemetry(void *pvParameters) {
                 copy = g_telemetry;
                 xSemaphoreGive(g_telemetryMutex);
 
-                // Monta a string JSON (Leve e rápido)
-                char payload[256];
+                // Monta a string JSON (Usando APENAS o buffer de 300)
+                char payload[300]; 
                 snprintf(payload, sizeof(payload),
-                    "{\"pitch\":%.1f,\"roll\":%.1f,\"accMag\":%.2f,\"gyroMag\":%.1f,\"jerk\":%.1f,\"state\":%d,\"bpm\":%.1f,\"spo2\":%.1f}",
-                    copy.pitch, copy.roll, copy.accMag, copy.gyroMag, copy.jerk, copy.state_beta1, copy.bpm, copy.spo2);
+                    "{\"pitch\":%.1f,\"roll\":%.1f,\"accMag\":%.2f,\"gyroMag\":%.1f,\"jerk\":%.1f,\"state\":%d,\"bpm\":%.1f,\"spo2\":%.1f,\"temp\":%.2f}",
+                    copy.pitch, copy.roll, copy.accMag, copy.gyroMag, copy.jerk, copy.state_beta1, copy.bpm, copy.spo2, copy.body_temp);
 
-                // Envia para o tópico do seu projeto antigo
+                // Envia para o tópico do seu projeto
                 if (mqtt_publish("smartwatch/dados", payload)) {
-                    //Serial.println("[CLOUD] Pacote enviado para a nuvem!");
+                     // Serial.println("[CLOUD] Pacote enviado para a nuvem!");
                 }
             }
             lastPublishTime = now;
         }
 
-        // Pausa curta para deixar o processador respirar e rodar outras coisas
         vTaskDelay(pdMS_TO_TICKS(50));
     }
 }

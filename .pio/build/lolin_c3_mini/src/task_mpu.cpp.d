@@ -163,4 +163,4 @@
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src/Wire.h \
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/cores/esp32/esp32-hal.h \
- src/task_mpu.h src/app_config.h src/i2c_mgr.h
+ include/task_mpu.h include/app_config.h include/i2c_mgr.h

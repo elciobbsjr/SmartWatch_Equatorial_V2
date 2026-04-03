@@ -219,4 +219,4 @@
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32c3/include/hal/include/hal/aes_types.h \
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32c3/include/mbedtls/mbedtls/include/mbedtls/error.h \
  .pio/libdeps/lolin_c3_mini/PubSubClient/src/PubSubClient.h \
- src/app_config.h src/mqtt_mgr.h
+ include/app_config.h include/mqtt_mgr.h

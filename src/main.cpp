@@ -4,6 +4,7 @@
 #include "task_motion.h" // <-- CORREÇÃO 1: Faltou incluir o header do cérebro!
 #include "task_telemetry.h" // <-- NOVO: O Mensageiro da Nuvem
 #include "app_config.h" 
+#include "task_temp.h" // <-- ADICIONE NO TOPO
 
 // Vamos deixar as tasks do oxímetro e heart incluídas, mas não vamos iniciá-las
 #include "task_oximeter.h"
@@ -40,8 +41,10 @@ void setup() {
     i2c_mgr_init();
 
     // INICIA O SISTEMA DE MOVIMENTO (Fase 6)
-    xTaskCreate(task_mpu, "TaskMPU", 4096, NULL, 1, NULL);       // Driver: Só lê I2C
-    xTaskCreate(task_motion, "TaskMotion", 4096, NULL, 2, NULL); // Cérebro: Calcula quedas
+    //xTaskCreate(task_mpu, "TaskMPU", 4096, NULL, 1, NULL);       // Driver: Só lê I2C
+    //xTaskCreate(task_motion, "TaskMotion", 4096, NULL, 2, NULL); // Cérebro: Calcula quedas
+    // NOVO: Monitor de Temperatura (Prioridade 1, pois não tem pressa)
+    xTaskCreate(task_temp, "TaskTemp", 4096, NULL, 1, NULL);
     
     // CONEXÃO COM O MUNDO (Fase 7 - Wi-Fi e MQTT)
     // Nota: Como o MQTT Secure (SSL/TLS) consome muita RAM, damos 8192 de memória

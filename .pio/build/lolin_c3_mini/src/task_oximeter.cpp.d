@@ -164,4 +164,4 @@
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src/Wire.h \
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/cores/esp32/esp32-hal.h \
  .pio/libdeps/lolin_c3_mini/SparkFun\ MAX3010x\ Pulse\ and\ Proximity\ Sensor\ Library/src/MAX30105.h \
- src/task_oximeter.h src/app_config.h src/i2c_mgr.h
+ include/task_oximeter.h include/app_config.h include/i2c_mgr.h

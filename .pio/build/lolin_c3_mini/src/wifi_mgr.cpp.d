@@ -182,4 +182,4 @@
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiUdp.h \
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/cores/esp32/Udp.h \
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/cores/esp32/cbuf.h \
- src/app_config.h src/wifi_mgr.h
+ include/app_config.h include/wifi_mgr.h

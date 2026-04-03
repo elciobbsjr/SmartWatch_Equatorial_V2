@@ -1,4 +1,5 @@
-.pio/build/lolin_c3_mini/src/i2c_mgr.cpp.o: src/i2c_mgr.cpp src/i2c_mgr.h \
+.pio/build/lolin_c3_mini/src/i2c_mgr.cpp.o: src/i2c_mgr.cpp \
+ include/i2c_mgr.h \
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/cores/esp32/esp_arduino_version.h \
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32c3/include/freertos/include/freertos/FreeRTOS.h \
@@ -163,4 +164,4 @@
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src/Wire.h \
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/cores/esp32/esp32-hal.h \
- src/app_config.h
+ include/app_config.h

@@ -4,31 +4,86 @@
 
 static unsigned long g_lastAttempt = 0;
 
-bool wifi_connect() {
-    if (WiFi.status() == WL_CONNECTED) return true;
+bool wifi_connect()
+{
+    // já conectado
+    if (WiFi.status() == WL_CONNECTED)
+        return true;
 
-    // evita ficar tentando toda hora (anti-spam)
-    unsigned long now = millis();
-    if (now - g_lastAttempt < 1000) return false;
-    g_lastAttempt = now;
+    Serial.println("[WIFI] Conectando...");
 
     WiFi.mode(WIFI_STA);
-    WiFi.setSleep(false); // mais estável para IoT em tempo real
+
+    // importante para estabilidade MQTT + TLS
+    WiFi.setSleep(false);
+
+    // inicia conexão
     WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-    unsigned long t0 = millis();
-    while (WiFi.status() != WL_CONNECTED && (millis() - t0) < WIFI_CONNECT_TIMEOUT_MS) {
-        delay(200);
+    int tentativas = 0;
+
+    while (WiFi.status() != WL_CONNECTED && tentativas < 30)
+    {
+        delay(500);
+        Serial.print(".");
+        tentativas++;
     }
 
-    return (WiFi.status() == WL_CONNECTED);
+    if (WiFi.status() == WL_CONNECTED)
+    {
+        Serial.println("\n[WIFI] Conectado!");
+        Serial.print("[WIFI] IP: ");
+        Serial.println(WiFi.localIP());
+
+        // ======================================
+        // CORREÇÃO DO DNS (resolve erro HiveMQ)
+        // ======================================
+
+        IPAddress dns1(8,8,8,8);
+        IPAddress dns2(1,1,1,1);
+
+        WiFi.config(
+            WiFi.localIP(),
+            WiFi.gatewayIP(),
+            WiFi.subnetMask(),
+            dns1,
+            dns2
+        );
+
+        Serial.println("[WIFI] DNS configurado manualmente");
+
+        // aguarda rede estabilizar
+        delay(2000);
+
+        // teste DNS
+        IPAddress ipTeste;
+
+        if (WiFi.hostByName(MQTT_HOST, ipTeste))
+        {
+            Serial.print("[WIFI] DNS OK -> ");
+            Serial.println(ipTeste);
+        }
+        else
+        {
+            Serial.println("[WIFI] DNS ainda falhou");
+        }
+
+        return true;
+    }
+
+    Serial.println("\n[WIFI] Falha ao conectar");
+    return false;
 }
 
-bool wifi_is_connected() {
+bool wifi_is_connected()
+{
     return WiFi.status() == WL_CONNECTED;
 }
 
-String wifi_ip() {
-    if (!wifi_is_connected()) return String("0.0.0.0");
+String wifi_ip()
+{
+    if (!wifi_is_connected())
+        return String("0.0.0.0");
+
     return WiFi.localIP().toString();
 }
