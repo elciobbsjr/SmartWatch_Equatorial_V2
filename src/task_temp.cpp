@@ -1,123 +1,104 @@
 #include <Arduino.h>
-#include <Wire.h>
 #include "task_temp.h"
-#include "app_config.h"
-#include "i2c_mgr.h"
 #include "telemetry.h"
 
-extern SemaphoreHandle_t g_i2cMutex;
 extern SemaphoreHandle_t g_telemetryMutex;
 
-#define AHT10_ADDR 0x38
-
-static const uint8_t CMD_MEASURE[] = {0xAC, 0x33, 0x00};
-
-
-// leitura universal AHT10/AHT20
-static bool aht_read(float *temperature, float *humidity)
+static float gerar_temperatura_fake(float bpm)
 {
-    bool ok = false;
+    float temp = 36.5f;
 
-    // envia comando de medição
-    if (xSemaphoreTake(g_i2cMutex, pdMS_TO_TICKS(200)))
-    {
-        Wire.beginTransmission(AHT10_ADDR);
+    if (bpm >= 110.0f)
+        temp += 0.4f;
+    else if (bpm >= 90.0f)
+        temp += 0.2f;
+    else if (bpm > 0.0f && bpm < 60.0f)
+        temp -= 0.1f;
 
-        Wire.write(CMD_MEASURE, sizeof(CMD_MEASURE));
+    float ruido = ((float)random(-15, 16)) / 100.0f;
+    temp += ruido;
 
-        ok = (Wire.endTransmission() == 0);
+    if (temp < 36.1f) temp = 36.1f;
+    if (temp > 37.3f) temp = 37.3f;
 
-        xSemaphoreGive(g_i2cMutex);
-    }
-
-    if (!ok)
-        return false;
-
-    vTaskDelay(pdMS_TO_TICKS(90));
-
-    uint8_t buf[6];
-
-    if (xSemaphoreTake(g_i2cMutex, pdMS_TO_TICKS(200)))
-    {
-        int n = Wire.requestFrom(AHT10_ADDR, 6);
-
-        if (n == 6)
-        {
-            for (int i = 0; i < 6; i++)
-                buf[i] = Wire.read();
-
-            // verifica se sensor não está ocupado
-            if ((buf[0] & 0x80) == 0)
-            {
-                uint32_t raw_humidity =
-                    ((uint32_t)buf[1] << 12) |
-                    ((uint32_t)buf[2] << 4) |
-                    (buf[3] >> 4);
-
-                uint32_t raw_temp =
-                    (((uint32_t)buf[3] & 0x0F) << 16) |
-                    ((uint32_t)buf[4] << 8) |
-                    buf[5];
-
-                *humidity =
-                    ((float)raw_humidity / 1048576.0f) * 100.0f;
-
-                *temperature =
-                    ((float)raw_temp / 1048576.0f) * 200.0f - 50.0f;
-
-                ok = true;
-            }
-        }
-
-        xSemaphoreGive(g_i2cMutex);
-    }
-
-    return ok;
+    return temp;
 }
-
-
 
 void task_temp(void *pvParameters)
 {
-    Serial.println("[TEMP] iniciando sensor AHT...");
+    Serial.println("[TEMP] iniciando gerador de temperatura fake...");
 
-    // espera sensor estabilizar
-    vTaskDelay(pdMS_TO_TICKS(1500));
+    randomSeed(micros());
 
-    Serial.println("[TEMP] pronto para leitura");
+    const uint32_t INTERVALO_ENVIO_MS = 5UL * 60UL * 1000UL;
+    const uint32_t JANELA_BATIMENTO_MS = 30000UL;
 
-
+    uint32_t ultimo_envio_temp = 0;
+    bool primeira_temp_enviada = false;
 
     while (true)
     {
-        float temp = 0;
-        float hum  = 0;
+        uint32_t agora = millis();
+        bool batimento_recente = false;
+        float bpm_atual = 0.0f;
 
-        bool ok = aht_read(&temp, &hum);
-
-        if (ok)
+        if ((agora - g_lastHeartbeatMs) <= JANELA_BATIMENTO_MS)
         {
+            batimento_recente = true;
+        }
+
+        if (g_telemetryMutex != NULL)
+        {
+            if (xSemaphoreTake(g_telemetryMutex, pdMS_TO_TICKS(20)))
+            {
+                bpm_atual = g_telemetry.bpm;
+                xSemaphoreGive(g_telemetryMutex);
+            }
+        }
+
+        bool deve_atualizar = false;
+
+        if (!primeira_temp_enviada && batimento_recente && bpm_atual > 0.0f)
+        {
+            deve_atualizar = true;
+        }
+        else if (primeira_temp_enviada &&
+                 batimento_recente &&
+                 bpm_atual > 0.0f &&
+                 (agora - ultimo_envio_temp >= INTERVALO_ENVIO_MS))
+        {
+            deve_atualizar = true;
+        }
+
+        if (deve_atualizar)
+        {
+            float temp_fake = gerar_temperatura_fake(bpm_atual);
+
             if (g_telemetryMutex != NULL)
             {
                 if (xSemaphoreTake(g_telemetryMutex, pdMS_TO_TICKS(20)))
                 {
-                    g_telemetry.body_temp = temp;
-
+                    g_telemetry.body_temp = temp_fake;
                     xSemaphoreGive(g_telemetryMutex);
                 }
             }
 
-            Serial.print("[TEMP] ");
-            Serial.print(temp);
-            Serial.print(" C | ");
-            Serial.print(hum);
-            Serial.println(" %");
+            ultimo_envio_temp = agora;
+            primeira_temp_enviada = true;
+
+            Serial.print("[TEMP] fake atualizada: ");
+            Serial.print(temp_fake, 2);
+            Serial.print(" C | BPM: ");
+            Serial.println(bpm_atual, 1);
         }
         else
         {
-            Serial.println("[TEMP] aguardando dados...");
+            if (!batimento_recente || bpm_atual <= 0.0f)
+            {
+                Serial.println("[TEMP] sem batimento recente, temperatura nao atualizada");
+            }
         }
 
-        vTaskDelay(pdMS_TO_TICKS(2000));
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }

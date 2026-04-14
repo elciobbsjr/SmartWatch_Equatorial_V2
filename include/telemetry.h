@@ -1,16 +1,27 @@
-#pragma once
 
-typedef struct {
+#pragma once
+#include <stdint.h>
+
+typedef struct
+{
     float pitch;
     float roll;
+
     float accMag;
     float gyroMag;
+
     float jerk;
-    int   state_beta1;
+
+    int state_beta1;
+
     float bpm;
-    float spo2;   
-    float body_temp; // <-- NOVO: Temperatura Corporal
+
+    float spo2;
+
+    float body_temp;   // <<< ADICIONAR
+
 } telemetry_data_t;
 
-// Avisa o sistema que a variável g_telemetry existe em algum lugar
 extern telemetry_data_t g_telemetry;
+
+extern volatile uint32_t g_lastHeartbeatMs;

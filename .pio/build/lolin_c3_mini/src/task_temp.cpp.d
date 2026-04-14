@@ -161,7 +161,4 @@
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32c3/include/esp_hw_support/include/soc/esp32/spiram.h \
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/cores/esp32/io_pin_remap.h \
  C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
- C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src/Wire.h \
- C:/Users/ResTIC16/.platformio/packages/framework-arduinoespressif32/cores/esp32/esp32-hal.h \
- include/task_temp.h include/app_config.h include/i2c_mgr.h \
- include/telemetry.h
+ include/task_temp.h include/telemetry.h

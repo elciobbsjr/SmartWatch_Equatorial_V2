@@ -6,14 +6,14 @@
 // ===== Pinos do ESP32-C3 Mini =====
 #define I2C_SDA_PIN 8
 #define I2C_SCL_PIN 9
-#define I2C_FREQ_HZ 100000 
+#define I2C_FREQ_HZ 25000
 
 // ===== Tempos (FreeRTOS) =====
 #define OXIMETER_SAMPLE_RATE_MS 20 // 50Hz
 
 // ===== Configurações de Nuvem (Wi-Fi e MQTT) =====
-#define WIFI_SSID "ELCIO J"
-#define WIFI_PASS "elc10jun10r"
+#define WIFI_SSID "Galaxy A36"
+#define WIFI_PASS "35246Jr@"
 #define WIFI_CONNECT_TIMEOUT_MS 10000
 
 #define MQTT_HOST "87a490b8ab324342ab84c48829e097ce.s1.eu.hivemq.cloud" // ex: broker.hivemq.com ou IP

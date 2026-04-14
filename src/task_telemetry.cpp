@@ -9,6 +9,7 @@
 
 extern SemaphoreHandle_t g_telemetryMutex;
 
+
 void task_telemetry(void *pvParameters)
 {
     Serial.println("[CLOUD] Tarefa de Nuvem e Telemetria iniciada!");
